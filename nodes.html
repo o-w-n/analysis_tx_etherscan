@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1080px;
+                 background-color: white;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+             #config {
+                 float: left;
+                 width: 400px;
+                 height: 600px;
+             }
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+            <div id="config"></div>
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "green", "font": {"color": "black"}, "id": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "label": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "shape": "dot", "title": "[13488648]: 2021-10-25 23:08:03 | OUT\nSource: 0x7f8dc5747d34e8c89f540a1ddfc3e374aa65813d\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.7217083887 | USD: 3044.077$\nGas: 145.0 GWEI\nDate rate: 4217.877$\n---------------------------------------------------------------------------\n[13488651]: 2021-10-25 23:08:50 | OUT\nSource: 0x3d6c23e6740152ea4563126aa496c7d8f2d9c6dc\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.1736535835 | USD: 732.449$\nGas: 145.0 GWEI\nDate rate: 4217.877$\n---------------------------------------------------------------------------\n[13488751]: 2021-10-25 23:31:31 | OUT\nSource: 0x21a31ee1afc51d94c2efccaa2092ad1028285549\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 213.9243003 | USD: 902306.386$\nGas: 220.0 GWEI\nDate rate: 4217.877$\n---------------------------------------------------------------------------\n[13488932]: 2021-10-26 00:10:36 | OUT\nSource: 0xdfd5293d8e347dfe59e90efd55b2956a1343963d\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.185 | USD: 764.254$\nGas: 213.0 GWEI\nDate rate: 4131.102$\n---------------------------------------------------------------------------\n[13622569]: 2021-11-15 23:06:23 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xd46f0a952f30808cdd890da0a6d90aa9518d13ec\nETH: 214.9993387722 | USD: 979860.346$\nGas: 253.5 GWEI\nDate rate: 4557.504$\n-------------------------\n[13671581]: 2021-11-23 17:14:56 | OUT\nSource: 0x9696f59e4d72e237be84ffd425dcad154bf96976\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 3.99993366 | USD: 17362.768$\nGas: 174.0 GWEI\nDate rate: 4340.764$\n---------------------------------------------------------------------------\n[13671619]: 2021-11-23 17:22:01 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 180.5 GWEI\nDate rate: 4340.764$\n-------------------------\n[13671629]: 2021-11-23 17:25:25 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 179.5 GWEI\nDate rate: 4340.764$\n-------------------------\n[13689057]: 2021-11-26 11:59:00 | OUT\nSource: 0xc098b2a3aa256d2140208c3de6543aaef5cd3a94\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 40.41750235 | USD: 162919.274$\nGas: 168.788702959 GWEI\nDate rate: 4030.909$\n---------------------------------------------------------------------------\n[13690053]: 2021-11-26 15:37:25 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1219336118028 | USD: 1219336.118028$\nGas: 117.0 GWEI\nDate rate: 4030.909$\n-------------------------\n[13691742]: 2021-11-26 21:55:15 | OUT\nSource: 0x9696f59e4d72e237be84ffd425dcad154bf96976\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 115.1595202 | USD: 464197.546$\nGas: 121.0 GWEI\nDate rate: 4030.909$\n---------------------------------------------------------------------------\n[13723796]: 2021-12-02 00:52:20 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xd46f0a952f30808cdd890da0a6d90aa9518d13ec\nETH: 159.0 | USD: 717297.018$\nGas: 166.0 GWEI\nDate rate: 4511.302$\n-------------------------\n[13741005]: 2021-12-04 19:04:53 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 110.0 GWEI\nDate rate: 4119.587$\n-------------------------\n[13741024]: 2021-12-04 19:07:51 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 104.5 GWEI\nDate rate: 4119.587$\n-------------------------\n[13741263]: 2021-12-04 20:00:34 | OUT\nSource: 0xc098b2a3aa256d2140208c3de6543aaef5cd3a94\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 248.75318105 | USD: 1024760.371$\nGas: 114.985360624 GWEI\nDate rate: 4119.587$\n---------------------------------------------------------------------------\n[13742346]: 2021-12-05 00:18:51 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0x1a1709dd7407021c3ce0a56e9d85c5afe014117c\nETH: 249.2806975285 | USD: 1046560.886$\nGas: 133.5 GWEI\nDate rate: 4198.323$\n-------------------------\n[13753467]: 2021-12-06 18:58:39 | OUT\nSource: 0x56eddb7aa87536c09ccc2793473599fd21a8b17f\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.6295648 | USD: 2744.107$\nGas: 150.0 GWEI\nDate rate: 4358.737$\n---------------------------------------------------------------------------\n[13753510]: 2021-12-06 19:07:01 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 119.0 GWEI\nDate rate: 4358.737$\n-------------------------\n[13753522]: 2021-12-06 19:09:38 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 110.0 GWEI\nDate rate: 4358.737$\n-------------------------\n[13759826]: 2021-12-07 19:27:32 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 95.5 GWEI\nDate rate: 4315.062$\n-------------------------\n[13785227]: 2021-12-11 19:35:49 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 80.0 GWEI\nDate rate: 4084.452$\n-------------------------\n[13785231]: 2021-12-11 19:36:41 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 80.0 GWEI\nDate rate: 4084.452$\n-------------------------\n[13799102]: 2021-12-13 22:41:39 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 116.5 GWEI\nDate rate: 3784.227$\n-------------------------\n[13799157]: 2021-12-13 22:54:48 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 118.0 GWEI\nDate rate: 3784.227$\n-------------------------\n[13811681]: 2021-12-15 21:37:17 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 141.5 GWEI\nDate rate: 4018.389$\n-------------------------\n[13811702]: 2021-12-15 21:42:22 | IN\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 128.0 GWEI\nDate rate: 4018.389$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0xc098b2a3aa256d2140208c3de6543aaef5cd3a94", "label": "0xc098b2a3aa256d2140208c3de6543aaef5cd3a94", "shape": "dot", "title": "[13689057]: 2021-11-26 11:59:00 | IN\nSource: 0xc098b2a3aa256d2140208c3de6543aaef5cd3a94\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 40.41750235 | USD: 162919.274$\nGas: 168.788702959 GWEI\nDate rate: 4030.909$\n-------------------------\n[13741263]: 2021-12-04 20:00:34 | IN\nSource: 0xc098b2a3aa256d2140208c3de6543aaef5cd3a94\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 248.75318105 | USD: 1024760.371$\nGas: 114.985360624 GWEI\nDate rate: 4119.587$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0x56eddb7aa87536c09ccc2793473599fd21a8b17f", "label": "0x56eddb7aa87536c09ccc2793473599fd21a8b17f", "shape": "dot", "title": "[13753467]: 2021-12-06 18:58:39 | IN\nSource: 0x56eddb7aa87536c09ccc2793473599fd21a8b17f\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.6295648 | USD: 2744.107$\nGas: 150.0 GWEI\nDate rate: 4358.737$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0x9696f59e4d72e237be84ffd425dcad154bf96976", "label": "0x9696f59e4d72e237be84ffd425dcad154bf96976", "shape": "dot", "title": "[13671581]: 2021-11-23 17:14:56 | IN\nSource: 0x9696f59e4d72e237be84ffd425dcad154bf96976\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 3.99993366 | USD: 17362.768$\nGas: 174.0 GWEI\nDate rate: 4340.764$\n-------------------------\n[13691742]: 2021-11-26 21:55:15 | IN\nSource: 0x9696f59e4d72e237be84ffd425dcad154bf96976\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 115.1595202 | USD: 464197.546$\nGas: 121.0 GWEI\nDate rate: 4030.909$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0x3d6c23e6740152ea4563126aa496c7d8f2d9c6dc", "label": "0x3d6c23e6740152ea4563126aa496c7d8f2d9c6dc", "shape": "dot", "title": "[13488651]: 2021-10-25 23:08:50 | IN\nSource: 0x3d6c23e6740152ea4563126aa496c7d8f2d9c6dc\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.1736535835 | USD: 732.449$\nGas: 145.0 GWEI\nDate rate: 4217.877$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0xdfd5293d8e347dfe59e90efd55b2956a1343963d", "label": "0xdfd5293d8e347dfe59e90efd55b2956a1343963d", "shape": "dot", "title": "[13488932]: 2021-10-26 00:10:36 | IN\nSource: 0xdfd5293d8e347dfe59e90efd55b2956a1343963d\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.185 | USD: 764.254$\nGas: 213.0 GWEI\nDate rate: 4131.102$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0x7f8dc5747d34e8c89f540a1ddfc3e374aa65813d", "label": "0x7f8dc5747d34e8c89f540a1ddfc3e374aa65813d", "shape": "dot", "title": "[13488648]: 2021-10-25 23:08:03 | IN\nSource: 0x7f8dc5747d34e8c89f540a1ddfc3e374aa65813d\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 0.7217083887 | USD: 3044.077$\nGas: 145.0 GWEI\nDate rate: 4217.877$\n-------------------------\n"}, {"color": "lightblue", "font": {"color": "black"}, "id": "0x21a31ee1afc51d94c2efccaa2092ad1028285549", "label": "0x21a31ee1afc51d94c2efccaa2092ad1028285549", "shape": "dot", "title": "[13488751]: 2021-10-25 23:31:31 | IN\nSource: 0x21a31ee1afc51d94c2efccaa2092ad1028285549\nTarget: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nETH: 213.9243003 | USD: 902306.386$\nGas: 220.0 GWEI\nDate rate: 4217.877$\n-------------------------\n"}, {"color": "blue", "font": {"color": "black"}, "id": "0xdac17f958d2ee523a2206206994597c13d831ec7", "label": "0xdac17f958d2ee523a2206206994597c13d831ec7", "shape": "dot", "title": "[13671619]: 2021-11-23 17:22:01 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 180.5 GWEI\nDate rate: 4340.764$\n---------------------------------------------------------------------------\n[13671629]: 2021-11-23 17:25:25 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 179.5 GWEI\nDate rate: 4340.764$\n---------------------------------------------------------------------------\n[13690053]: 2021-11-26 15:37:25 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1219336118028 | USD: 1219336.118028$\nGas: 117.0 GWEI\nDate rate: 4030.909$\n---------------------------------------------------------------------------\n[13741005]: 2021-12-04 19:04:53 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 110.0 GWEI\nDate rate: 4119.587$\n---------------------------------------------------------------------------\n[13741024]: 2021-12-04 19:07:51 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 104.5 GWEI\nDate rate: 4119.587$\n---------------------------------------------------------------------------\n[13753510]: 2021-12-06 19:07:01 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 119.0 GWEI\nDate rate: 4358.737$\n---------------------------------------------------------------------------\n[13753522]: 2021-12-06 19:09:38 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 110.0 GWEI\nDate rate: 4358.737$\n---------------------------------------------------------------------------\n[13759826]: 2021-12-07 19:27:32 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 95.5 GWEI\nDate rate: 4315.062$\n---------------------------------------------------------------------------\n[13785227]: 2021-12-11 19:35:49 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 80.0 GWEI\nDate rate: 4084.452$\n---------------------------------------------------------------------------\n[13785231]: 2021-12-11 19:36:41 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 80.0 GWEI\nDate rate: 4084.452$\n---------------------------------------------------------------------------\n[13799102]: 2021-12-13 22:41:39 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 116.5 GWEI\nDate rate: 3784.227$\n---------------------------------------------------------------------------\n[13799157]: 2021-12-13 22:54:48 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 118.0 GWEI\nDate rate: 3784.227$\n---------------------------------------------------------------------------\n[13811681]: 2021-12-15 21:37:17 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 141.5 GWEI\nDate rate: 4018.389$\n---------------------------------------------------------------------------\n[13811702]: 2021-12-15 21:42:22 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xdac17f958d2ee523a2206206994597c13d831ec7\nTether USD: 1000000000000 | USD: 1000000.0$\nGas: 128.0 GWEI\nDate rate: 4018.389$\n---------------------------------------------------------------------------\n"}, {"color": "blue", "font": {"color": "black"}, "id": "0xd46f0a952f30808cdd890da0a6d90aa9518d13ec", "label": "0xd46f0a952f30808cdd890da0a6d90aa9518d13ec", "shape": "dot", "title": "[13622569]: 2021-11-15 23:06:23 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xd46f0a952f30808cdd890da0a6d90aa9518d13ec\nETH: 214.9993387722 | USD: 979860.346$\nGas: 253.5 GWEI\nDate rate: 4557.504$\n---------------------------------------------------------------------------\n[13723796]: 2021-12-02 00:52:20 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0xd46f0a952f30808cdd890da0a6d90aa9518d13ec\nETH: 159.0 | USD: 717297.018$\nGas: 166.0 GWEI\nDate rate: 4511.302$\n---------------------------------------------------------------------------\n"}, {"color": "blue", "font": {"color": "black"}, "id": "0x1a1709dd7407021c3ce0a56e9d85c5afe014117c", "label": "0x1a1709dd7407021c3ce0a56e9d85c5afe014117c", "shape": "dot", "title": "[13742346]: 2021-12-05 00:18:51 | OUT\nSource: 0x21fea1281fa3665c35e2f53365bdf35d41de0afe\nTarget: 0x1a1709dd7407021c3ce0a56e9d85c5afe014117c\nETH: 249.2806975285 | USD: 1046560.886$\nGas: 133.5 GWEI\nDate rate: 4198.323$\n---------------------------------------------------------------------------\n"}]);
+                  edges = new vis.DataSet([{"from": "0x7f8dc5747d34e8c89f540a1ddfc3e374aa65813d", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}, {"from": "0x3d6c23e6740152ea4563126aa496c7d8f2d9c6dc", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}, {"from": "0x21a31ee1afc51d94c2efccaa2092ad1028285549", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}, {"from": "0xdfd5293d8e347dfe59e90efd55b2956a1343963d", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}, {"from": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "to": "0xd46f0a952f30808cdd890da0a6d90aa9518d13ec", "width": 3}, {"from": "0x9696f59e4d72e237be84ffd425dcad154bf96976", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}, {"from": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "to": "0xdac17f958d2ee523a2206206994597c13d831ec7", "width": 3}, {"from": "0xc098b2a3aa256d2140208c3de6543aaef5cd3a94", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}, {"from": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "to": "0x1a1709dd7407021c3ce0a56e9d85c5afe014117c", "width": 3}, {"from": "0x56eddb7aa87536c09ccc2793473599fd21a8b17f", "to": "0x21fea1281fa3665c35e2f53365bdf35d41de0afe", "width": 3}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": true
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 120,
+            "springConstant": 0.05,
+            "springLength": 240
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+                  // if this network requires displaying the configure window,
+                  // put it in its div
+                  options.configure["container"] = document.getElementById("config");
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
